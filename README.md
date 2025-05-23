@@ -2,6 +2,9 @@
 
 A modern, responsive weather dashboard web app that provides real-time weather insights, 5-day and hourly forecasts, air quality, and weather alerts using the [OpenWeatherMap API](https://openweathermap.org/).
 
+**Live Demo:**  
+[https://weather-dashboard-gamma-gules.vercel.app/](https://weather-dashboard-gamma-gules.vercel.app/)
+
 ## Features
 
 - **Current Weather:** View temperature, humidity, wind, pressure, visibility, sunrise/sunset, and weather icon for any city.
