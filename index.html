@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Weather Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- header portion -->
+    <header class="main-header">
+      <div class="branding">
+        <h1><i class="fas fa-cloud-sun"></i>  Weather Dashboard</h1>
+        <p>Real-time weather insights powered by OpenWeatherMap</p>
+      </div>
+      <div class="settings-panel">
+        <div class="unit-toggle">
+          <label>
+            <input type="radio" name="unit" value="metric" checked /> °C
+          </label>
+          <label>
+            <input type="radio" name="unit" value="imperial" /> °F
+          </label>
+        </div>
+        <div class="theme-toggle">
+          <label>
+            <input type="checkbox" id="darkModeToggle" /> Dark Mode
+          </label>
+        </div>
+        <div class="language-select">
+          <select id="languageSelect" aria-label="Select language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search and Location Section -->
+    <section class="search-section">
+      <div class="search-bar">
+        <input 
+          type="text" 
+          id="cityInput" 
+          placeholder="Enter city name or ZIP code" 
+          aria-label="City name or ZIP code"
+        />
+        <button id="searchBtn" aria-label="Search weather"><i class="fas fa-search"></i> Search</button>
+        <button id="geoLocationBtn" aria-label="Use current location"><i class="fas fa-map-marker-alt"></i> Use My Location</button>
+      </div>
+      <div class="search-options">
+        <label>
+          <input type="checkbox" id="includeAirQuality" /> Include Air Quality Data
+        </label>
+        <label>
+          <input type="checkbox" id="includeAlerts" /> Show Weather Alerts
+        </label>
+      </div>
+    </section>
+
+    <!-- Current Weather with Additional Metrics -->
+    <section class="current-weather" id="weatherCard" style="display: none;">
+      <div class="weather-header">
+        <h2 id="cityName">City Name</h2>
+        <div class="weather-icon-container">
+          <img id="weatherIcon" src="" alt="Weather Icon" />
+          <span id="currentTime" class="local-time"></span>
+        </div>
+      </div>
+      <div class="weather-details-grid">
+        <div class="primary-details">
+          <p><strong>Temperature:</strong> <span id="temperature"></span></p>
+          <p><strong>Feels Like:</strong> <span id="feelsLike"></span></p>
+          <p><strong>Humidity:</strong> <span id="humidity"></span></p>
+          <p><strong>Wind Speed:</strong> <span id="windSpeed"></span></p>
+          <p><strong>Wind Direction:</strong> <span id="windDirection"></span></p>
+        </div>
+        <div class="secondary-details">
+          <p><strong>Conditions:</strong> <span id="description"></span></p>
+          <p><strong>Pressure:</strong> <span id="pressure"></span></p>
+          <p><strong>Visibility:</strong> <span id="visibility"></span></p>
+          <p><strong>Sunrise:</strong> <span id="sunrise"></span></p>
+          <p><strong>Sunset:</strong> <span id="sunset"></span></p>
+        </div>
+      </div>
+      <!-- Air Quality Section -->
+      <div class="air-quality" id="airQualitySection" style="display: none;">
+        <h3>Air Quality Index</h3>
+        <p><strong>AQI:</strong> <span id="aqi"></span></p>
+        <p><strong>Category:</strong> <span id="aqiCategory"></span></p>
+      </div>
+      <!-- Weather Alerts Section -->
+      <div class="weather-alerts" id="weatherAlertsSection" style="display: none;">
+        <h3>Weather Alerts</h3>
+        <ul id="alertsList"></ul>
+      </div>
+    </section>
+
+    <!-- Extended Forecast (5-Day + Hourly) -->
+    <section class="forecast-section" id="forecastSection" style="display: none;">
+      <div class="forecast-tabs">
+        <button class="tab active" data-tab="daily">5-Day Forecast</button>
+        <button class="tab" data-tab="hourly">24-Hour Forecast</button>
+      </div>
+      <div class="forecast-content" id="dailyForecast">
+        <h3>5-Day Forecast</h3>
+        <div class="forecast-grid" id="forecastGrid">
+          <!-- Forecast cards will be inserted here via JS -->
+        </div>
+      </div>
+      <div class="forecast-content" id="hourlyForecast" style="display: none;">
+        <h3>24-Hour Forecast</h3>
+        <div class="hourly-forecast-slider" id="hourlyForecastSlider">
+          <!-- Hourly forecast cards will be inserted here via JS -->
+        </div>
+        <div class="slider-controls">
+          <button id="prevHourly" aria-label="Previous hour"><i class="fas fa-chevron-left"></i></button>
+          <button id="nextHourly" aria-label="Next hour"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Weather Map Integration -->
+    <section class="weather-map" id="weatherMapSection" style="display: none;">
+      <h3>Weather Map</h3>
+      <div id="weatherMap" class="map-container">
+        <!-- Map will be rendered here via JS (e.g., OpenWeatherMap Layers or Leaflet.js) -->
+      </div>
+      <div class="map-controls">
+        <label>
+          <input type="radio" name="mapLayer" value="temperature" checked /> Temperature
+        </label>
+        <label>
+          <input type="radio" name="mapLayer" value="precipitation" /> Precipitation
+        </label>
+        <label>
+          <input type="radio" name="mapLayer" value="wind" /> Wind
+        </label>
+      </div>
+    </section>
+
+    <!-- Weather Trends and Statistics -->
+    <section class="weather-trends" id="weatherTrendsSection" style="display: none;">
+      <h3>Weather Trends</h3>
+      <div class="trends-grid">
+        <div class="chart-container">
+          <h4>Temperature Trend (Last 7 Days)</h4>
+          <canvas id="tempChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h4>Precipitation Trend (Last 7 Days)</h4>
+          <canvas id="precipChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error / Info Message -->
+    <div class="message-box" id="messageBox" style="display: none;">
+      <p id="error" class="error-msg"></p>
+      <button id="closeMessage" aria-label="Close message"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Search History and Saved Locations -->
+    <section class="history-locations">
+      <div class="history">
+        <h4>Recent Searches</h4>
+        <ul id="searchHistory"></ul>
+        <button id="clearHistory" aria-label="Clear search history">Clear History</button>
+      </div>
+      <div class="saved-locations">
+        <h4>Saved Locations</h4>
+        <ul id="savedLocations"></ul>
+        <button id="addCurrentToSaved" aria-label="Save current location">Save Current Location</button>
+      </div>
+    </section>
+
+    <!-- Footer with Additional Info -->
+    <footer class="dashboard-footer">
+      <div class="footer-links">
+        <a href="#" id="aboutLink">About</a>
+        <a href="#" id="privacyLink">Privacy Policy</a>
+        <a href="#" id="contactLink">Contact Us</a>
+      </div>
+      <div class="api-credit">
+        <p>Data provided by <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a></p>
+        <p>Last updated: <span id="lastUpdateTime"></span></p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal for Detailed Information -->
+  <div class="modal" id="infoModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" id="closeModal">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
