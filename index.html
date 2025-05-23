@@ -2,32 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced Weather Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
   <div class="container">
-    <!-- header portion -->
+    <!-- Header -->
     <header class="main-header">
       <div class="branding">
-        <h1><i class="fas fa-cloud-sun"></i>  Weather Dashboard</h1>
+        <h1><i class="fas fa-cloud-sun"></i> Weather Dashboard</h1>
         <p>Real-time weather insights powered by OpenWeatherMap</p>
       </div>
       <div class="settings-panel">
         <div class="unit-toggle">
-          <label>
-            <input type="radio" name="unit" value="metric" checked /> °C
-          </label>
-          <label>
-            <input type="radio" name="unit" value="imperial" /> °F
-          </label>
+          <label><input type="radio" name="unit" value="metric" checked /> °C</label>
+          <label><input type="radio" name="unit" value="imperial" /> °F</label>
         </div>
         <div class="theme-toggle">
-          <label>
-            <input type="checkbox" id="darkModeToggle" /> Dark Mode
-          </label>
+          <label><input type="checkbox" id="darkModeToggle" /> Dark Mode</label>
         </div>
         <div class="language-select">
           <select id="languageSelect" aria-label="Select language">
@@ -40,29 +34,20 @@
       </div>
     </header>
 
-    <!-- Search and Location Section -->
+    <!-- Search Section -->
     <section class="search-section">
       <div class="search-bar">
-        <input 
-          type="text" 
-          id="cityInput" 
-          placeholder="Enter city name or ZIP code" 
-          aria-label="City name or ZIP code"
-        />
+        <input type="text" id="cityInput" placeholder="Enter city name or ZIP code" aria-label="City name or ZIP code" />
         <button id="searchBtn" aria-label="Search weather"><i class="fas fa-search"></i> Search</button>
         <button id="geoLocationBtn" aria-label="Use current location"><i class="fas fa-map-marker-alt"></i> Use My Location</button>
       </div>
       <div class="search-options">
-        <label>
-          <input type="checkbox" id="includeAirQuality" /> Include Air Quality Data
-        </label>
-        <label>
-          <input type="checkbox" id="includeAlerts" /> Show Weather Alerts
-        </label>
+        <label><input type="checkbox" id="includeAirQuality" /> Include Air Quality Data</label>
+        <label><input type="checkbox" id="includeAlerts" /> Show Weather Alerts</label>
       </div>
     </section>
 
-    <!-- Current Weather with Additional Metrics -->
+    <!-- Current Weather -->
     <section class="current-weather" id="weatherCard" style="display: none;">
       <div class="weather-header">
         <h2 id="cityName">City Name</h2>
@@ -87,12 +72,16 @@
           <p><strong>Sunset:</strong> <span id="sunset"></span></p>
         </div>
       </div>
+      
       <!-- Air Quality Section -->
       <div class="air-quality" id="airQualitySection" style="display: none;">
         <h3>Air Quality Index</h3>
-        <p><strong>AQI:</strong> <span id="aqi"></span></p>
-        <p><strong>Category:</strong> <span id="aqiCategory"></span></p>
+        <div class="aqi-container">
+          <p><strong>AQI:</strong> <span id="aqi"></span></p>
+          <p><strong>Category:</strong> <span id="aqiCategory"></span></p>
+        </div>
       </div>
+      
       <!-- Weather Alerts Section -->
       <div class="weather-alerts" id="weatherAlertsSection" style="display: none;">
         <h3>Weather Alerts</h3>
@@ -100,71 +89,174 @@
       </div>
     </section>
 
-    <!-- Extended Forecast (5-Day + Hourly) -->
+    <!-- Forecast Section -->
     <section class="forecast-section" id="forecastSection" style="display: none;">
       <div class="forecast-tabs">
         <button class="tab active" data-tab="daily">5-Day Forecast</button>
         <button class="tab" data-tab="hourly">24-Hour Forecast</button>
+        <button class="tab" data-tab="trends">Trends & Analysis</button>
       </div>
+      
       <div class="forecast-content" id="dailyForecast">
         <h3>5-Day Forecast</h3>
-        <div class="forecast-grid" id="forecastGrid">
-          <!-- Forecast cards will be inserted here via JS -->
-        </div>
+        <div class="forecast-grid" id="forecastGrid"></div>
       </div>
+      
       <div class="forecast-content" id="hourlyForecast" style="display: none;">
         <h3>24-Hour Forecast</h3>
-        <div class="hourly-forecast-slider" id="hourlyForecastSlider">
-          <!-- Hourly forecast cards will be inserted here via JS -->
+        <div class="hourly-forecast-container">
+          <div class="hourly-forecast-slider" id="hourlyForecastSlider"></div>
+          <div class="slider-controls">
+            <button id="prevHourly" aria-label="Previous hour"><i class="fas fa-chevron-left"></i></button>
+            <button id="nextHourly" aria-label="Next hour"><i class="fas fa-chevron-right"></i></button>
+          </div>
         </div>
-        <div class="slider-controls">
-          <button id="prevHourly" aria-label="Previous hour"><i class="fas fa-chevron-left"></i></button>
-          <button id="nextHourly" aria-label="Next hour"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      
+      <div class="forecast-content" id="trendsAnalysis" style="display: none;">
+        <h3>Weather Trends & Analysis</h3>
+        
+        <!-- Statistical Summary -->
+        <div class="analysis-summary">
+          <div class="stat-card">
+            <h4>Temperature Analysis</h4>
+            <div class="stat-content">
+              <p><strong>Average:</strong> <span id="avgTemp"></span></p>
+              <p><strong>Range:</strong> <span id="tempRange"></span></p>
+              <p><strong>Trend:</strong> <span id="tempTrend"></span></p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h4>Humidity Analysis</h4>
+            <div class="stat-content">
+              <p><strong>Average:</strong> <span id="avgHumidity"></span></p>
+              <p><strong>Range:</strong> <span id="humidityRange"></span></p>
+              <p><strong>Trend:</strong> <span id="humidityTrend"></span></p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h4>Pressure Analysis</h4>
+            <div class="stat-content">
+              <p><strong>Average:</strong> <span id="avgPressure"></span></p>
+              <p><strong>Range:</strong> <span id="pressureRange"></span></p>
+              <p><strong>Trend:</strong> <span id="pressureTrend"></span></p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <h4>Wind Analysis</h4>
+            <div class="stat-content">
+              <p><strong>Average Speed:</strong> <span id="avgWind"></span></p>
+              <p><strong>Max Speed:</strong> <span id="maxWind"></span></p>
+              <p><strong>Dominant Direction:</strong> <span id="windDirection"></span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Pattern Analysis -->
+        <div class="pattern-analysis">
+          <h4>Weather Pattern Insights</h4>
+          <div class="insights-grid">
+            <div class="insight-card">
+              <i class="fas fa-thermometer-half"></i>
+              <h5>Temperature Stability</h5>
+              <p id="tempStability"></p>
+            </div>
+            <div class="insight-card">
+              <i class="fas fa-tint"></i>
+              <h5>Humidity Patterns</h5>
+              <p id="humidityPattern"></p>
+            </div>
+            <div class="insight-card">
+              <i class="fas fa-compress-arrows-alt"></i>
+              <h5>Pressure Trends</h5>
+              <p id="pressurePattern"></p>
+            </div>
+            <div class="insight-card">
+              <i class="fas fa-cloud-rain"></i>
+              <h5>Precipitation Forecast</h5>
+              <p id="precipitationInsight"></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="trends-grid">
+          <div class="chart-container">
+            <h4>Temperature Trend (Next 5 Days)</h4>
+            <canvas id="tempChart"></canvas>
+            <div class="chart-analysis">
+              <p id="tempAnalysis"></p>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h4>Humidity Trend (Next 5 Days)</h4>
+            <canvas id="humidityChart"></canvas>
+            <div class="chart-analysis">
+              <p id="humidityAnalysis"></p>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h4>Atmospheric Pressure Trend</h4>
+            <canvas id="pressureChart"></canvas>
+            <div class="chart-analysis">
+              <p id="pressureAnalysis"></p>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h4>Wind Speed Variations</h4>
+            <canvas id="windChart"></canvas>
+            <div class="chart-analysis">
+              <p id="windAnalysis"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Recommendations -->
+        <div class="recommendations">
+          <h4>Smart Recommendations</h4>
+          <div class="recommendation-cards">
+            <div class="rec-card" id="clothingRec">
+              <i class="fas fa-tshirt"></i>
+              <h5>Clothing Advice</h5>
+              <p id="clothingAdvice"></p>
+            </div>
+            <div class="rec-card" id="activityRec">
+              <i class="fas fa-running"></i>
+              <h5>Activity Suggestions</h5>
+              <p id="activityAdvice"></p>
+            </div>
+            <div class="rec-card" id="healthRec">
+              <i class="fas fa-heartbeat"></i>
+              <h5>Health Tips</h5>
+              <p id="healthAdvice"></p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Weather Map Integration -->
+    <!-- Weather Map -->
     <section class="weather-map" id="weatherMapSection" style="display: none;">
       <h3>Weather Map</h3>
       <div id="weatherMap" class="map-container">
-        <!-- Map will be rendered here via JS (e.g., OpenWeatherMap Layers or Leaflet.js) -->
+        <div class="map-placeholder">
+          <i class="fas fa-map fa-3x"></i>
+          <p>Weather map integration coming soon</p>
+        </div>
       </div>
       <div class="map-controls">
-        <label>
-          <input type="radio" name="mapLayer" value="temperature" checked /> Temperature
-        </label>
-        <label>
-          <input type="radio" name="mapLayer" value="precipitation" /> Precipitation
-        </label>
-        <label>
-          <input type="radio" name="mapLayer" value="wind" /> Wind
-        </label>
+        <label><input type="radio" name="mapLayer" value="temperature" checked /> Temperature</label>
+        <label><input type="radio" name="mapLayer" value="precipitation" /> Precipitation</label>
+        <label><input type="radio" name="mapLayer" value="wind" /> Wind</label>
       </div>
     </section>
 
-    <!-- Weather Trends and Statistics -->
-    <section class="weather-trends" id="weatherTrendsSection" style="display: none;">
-      <h3>Weather Trends</h3>
-      <div class="trends-grid">
-        <div class="chart-container">
-          <h4>Temperature Trend (Last 7 Days)</h4>
-          <canvas id="tempChart"></canvas>
-        </div>
-        <div class="chart-container">
-          <h4>Precipitation Trend (Last 7 Days)</h4>
-          <canvas id="precipChart"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <!-- Error / Info Message -->
+    <!-- Error Message -->
     <div class="message-box" id="messageBox" style="display: none;">
       <p id="error" class="error-msg"></p>
       <button id="closeMessage" aria-label="Close message"><i class="fas fa-times"></i></button>
     </div>
 
-    <!-- Search History and Saved Locations -->
+    <!-- History and Saved Locations -->
     <section class="history-locations">
       <div class="history">
         <h4>Recent Searches</h4>
@@ -178,7 +270,7 @@
       </div>
     </section>
 
-    <!-- Footer with Additional Info -->
+    <!-- Footer -->
     <footer class="dashboard-footer">
       <div class="footer-links">
         <a href="#" id="aboutLink">About</a>
@@ -192,13 +284,19 @@
     </footer>
   </div>
 
-  <!-- Modal for Detailed Information -->
+  <!-- Modal -->
   <div class="modal" id="infoModal" style="display: none;">
     <div class="modal-content">
       <span class="close-modal" id="closeModal">&times;</span>
       <h2 id="modalTitle"></h2>
       <div id="modalBody"></div>
     </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading weather data...</p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
